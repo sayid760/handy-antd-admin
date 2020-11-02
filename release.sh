@@ -19,7 +19,7 @@ then
   fi
 
   # commit
-  npm version $VERSION --message "build: release $VERSION"
+  npm version $VERSION --message "fix readme"
 
   # publish
   git push origin main
