@@ -23,10 +23,10 @@ then
 
   # publish
   git push origin main
-  git push origin refs/tags/v$VERSION
+  # git push origin refs/tags/v$VERSION
 
   # sync dev
-  git checkout dev
-  git rebase main
-  git push origin dev
+  # git checkout dev
+  # git rebase main
+  # git push origin dev
 fi
