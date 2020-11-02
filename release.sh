@@ -26,7 +26,7 @@ then
   # git push origin refs/tags/v$VERSION
 
   # sync dev
-  # git checkout dev
-  # git rebase main
-  # git push origin dev
+  git checkout dev
+  git rebase main
+  git push origin dev
 fi
