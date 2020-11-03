@@ -21,6 +21,7 @@ import { computed, watch, getCurrentInstance, onMounted, reactive, ref, toRefs, 
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
 import SubMenu from "./SubMenu.vue";
+import { genPath } from '/@/utils'
 
 export default {
   components: {
@@ -29,12 +30,11 @@ export default {
   setup() {
     const { getters, commit } = useStore();
     const { ctx } = getCurrentInstance();
-    const router = useRouter();
     const route = useRoute();
     const routes = computed(() => ctx.$root.$router.options.routes)
 
     const state = reactive({
-      lastOpenKey:null,
+      lastOpenKey: null,
       openKey: computed(() => getters.openKey),
       selectKey: computed(() => {
         console.log(getters.selectKey)
@@ -45,7 +45,18 @@ export default {
 
     const menuModel = computed(() => getters.menuModel);
     const theme = computed(() => getters.theme);
-    const openChange = function (openKeys) {
+
+     // 获取打开的子菜单
+    const genParentPath = () =>{
+      var firstString = route.path.split('/')[1]; 
+      // console.log(firstString)
+      // const index = route.path.indexOf("/");
+      // const lastOpenKey = toRef(state, "latestOpenKey") 
+      // return route.meta.isGroup ? [...(route.matched.slice(0, 3).map(item => item.path)), lastOpenKey.value] : [route.matched[0].path]
+      return genPath(route.matched, '/'+firstString)
+    }
+
+    const openChange = (openKeys) => {
       state.latestOpenKey = openKeys.find(key => state.openKey.indexOf(key) === -1);
       commit("layout/updateOpenKey", openKeys);
     };
@@ -54,25 +65,20 @@ export default {
         const index = route.path.lastIndexOf("/");
         const pre = route.path.substring(0, index);
         const end = (route.meta.onlyOne&&route.meta.onlyOne)? route.path.substring(index, route.path.length):route.path.substring(index + 1, route.path.length) 
-        // state.openKey = [ pre ]
-        // state.selectKey =  ['error-dashboard']
-        console.log([pre])
-        commit("layout/updateOpenKey", pre==''?['/']:[ pre ]);
+        let arr = genParentPath()
+        console.log(arr)
+        commit("layout/updateOpenKey", arr);
         commit("layout/selectKey", end);
     })
    
     watch(() => route.fullPath, () => {
-      // 获取打开的子菜单
-      const lastOpenKey = toRef(state, "latestOpenKey") 
-      let arr = route.meta.isGroup ? [...(route.matched.slice(0, 3).map(item => item.path)), lastOpenKey.value] : [route.matched[0].path]
+      let arr = genParentPath()
       commit("layout/updateOpenKey", arr);
     })
 
     return {
       ...toRefs(state),
       routes,
-      // selectKey,
-      // openKey,
       menuModel,
       theme,
       openChange,
@@ -81,9 +87,6 @@ export default {
 };
 </script>
 <style>
-.menu{
-  overflow-y: scroll;
-}
 .ant-menu-sub.ant-menu-inline > .ant-menu-item,
 .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
   height: 48px;

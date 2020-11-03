@@ -35,12 +35,12 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import Menu from "./menu/index.vue";
-import Content from "./content/index.vue";
-import Header from "./header/index.vue";
-import Logo from "./logo/index.vue";
-import Tab from "./tab/index.vue";
-import Setup from "./setup/index.vue";
+import Menu from "./component/menu/index.vue";
+import Content from "./component/content.vue";
+import Header from "./component/header.vue";
+import Logo from "./component/logo.vue";
+import Tab from "./component/tab.vue";
+import Setup from "./component/setup.vue";
 export default {
   components: {
     Menu,
@@ -89,7 +89,12 @@ html {
 #basic-layout .ant-layout-sider {
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
   z-index: 999;
+  overflow-y: auto;
 }
+.ant-layout-sider::-webkit-scrollbar {
+    width: 0;
+}
+
 .dark {
   background-color: #191a23 !important;
 }

@@ -6,7 +6,7 @@ export default [
   { path: '/login', component: () => import('/@/views/login/index.vue'), hidden: true },
   {
     path: '/',
-    name: 'main',
+    name: 'home',
     meta: { title: '首页', icon: 'HomeOutlined' },
     component: Layout,
     redirect: "dashboard",
@@ -20,17 +20,17 @@ export default [
     ]
   },
   {
-    path: '/behavior',
-    name: 'behavior',
-    meta: {title: '用户行为', icon: 'UnorderedListOutlined' },
+    path: '/table',
+    name: 'table',
+    meta: {title: '表格', icon: 'UnorderedListOutlined' },
     component: Layout,
-    redirect: "/online-time",
+    redirect: "/table-base",
     children: [
       {
-        path: 'online-time',
-        name: 'online-time',
-        meta: { title: '用户在线时长', icon: 'DatabaseOutlined' },
-        component: () => import('/@/views/online-time/index.vue')
+        path: 'table-base',
+        name: 'table-base',
+        meta: { title: '基础表格', icon: 'DatabaseOutlined' },
+        component: () => import('/@/views/table/base.vue')
       },{
         path: 'new-users',
         name: 'new-users',
@@ -86,6 +86,27 @@ export default [
         name: 'upload',
         meta: { title: 'uploadto', icon: 'DatabaseOutlined' },
         component: () => import('/@/views/upload/index.vue'),
+      }
+    ]
+  },
+  {
+    path: '/chart',
+    name: 'chart',
+    meta: { title: '数据图表', icon: 'UnorderedListOutlined'},
+    component: Layout,
+    // redirect: "/upload",
+    children: [
+      {
+        path: 'lineChart',
+        name: 'lineChart',
+        meta: { title: '折线图', icon: 'LineChartOutlined' },
+        component: () => import('/@/views/chart/lineChart.vue'),
+      },
+      {
+        path: 'columnChart',
+        name: 'columnChart',
+        meta: { title: '柱状图', icon: 'BarChartOutlined' },
+        component: () => import('/@/views/chart/columnChart.vue'),
       }
     ]
   },

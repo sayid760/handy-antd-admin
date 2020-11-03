@@ -1,4 +1,4 @@
-import { onMounted, watch, onUnmounted } from 'vue';
+import { onMounted, watch, onUnmounted, nextTick } from 'vue';
 import echarts from 'echarts';
 
 type InitOptions = {
@@ -14,7 +14,7 @@ type GraphicMethods = 'extendShape' | 'registerShape' | 'getShapeClass' | 'clipP
 
 type InstanceMethods = 'setOption' | 'getWidth' | 'getHeight' | 'getDom' | 'getOption' | 'resize' | 'dispatchAction' | 'on' | 'off' | 'convertToPixel' | 'convertFromPixel' | 'containPixel' | 'showLoading' | 'hideLoading' | 'getDataURL' | 'getConnectedDataURL' | 'appendData' | 'clear' | 'isDisposed' | 'dispose';
 
-export function useECharts<T extends { option: echarts.EChartOption }>(
+function useECharts<T extends { option: echarts.EChartOption }>(
     props: T,
     el: string,
     theme?: Object | string,
@@ -25,15 +25,20 @@ export function useECharts<T extends { option: echarts.EChartOption }>(
     echartsGraphicMethods: (method: GraphicMethods, ...args: any[]) => any
 } {
     let chartProxy: echarts.ECharts | null;
-
-    onMounted(() => {
-        const chart = echarts.init(
+    let chart 
+    const draw=()=>{
+        chart = echarts.init(
             document.getElementById(el) as HTMLDivElement,
             theme,
             opts
         );
         chart.setOption(props.option);
+    }
 
+    onMounted(() => {
+        // nextTick(() => {})
+            draw()
+        
         chartProxy = new Proxy(chart, {
             get(target, property) {
                 switch (property) {
@@ -55,6 +60,7 @@ export function useECharts<T extends { option: echarts.EChartOption }>(
                 }
             }
         });
+
     });
 
     onUnmounted(() => {
@@ -84,3 +90,6 @@ export function useECharts<T extends { option: echarts.EChartOption }>(
         echartsGraphicMethods
     };
 }
+
+
+export default useECharts

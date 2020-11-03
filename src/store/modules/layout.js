@@ -1,4 +1,4 @@
-const defaultHomeKey = 'home';
+const defaultHomeKey = 'dashboard';
 
 const state = {
 	// 左侧菜单
@@ -19,7 +19,7 @@ const state = {
 	tab: true,
 	// 选项卡内容存储
 	panes: [
-		// { title: "首页", key: defaultHomeKey, path: "/", closable: false }
+		{ title: "首页", key: defaultHomeKey, path: "/dashboard", closable: false }
 	],
 	// 当前激活选项卡
 	activeKey: defaultHomeKey,
@@ -136,6 +136,7 @@ const mutations = {
 		const length = panes.length;
 		const key = panes[length - 1].key;
 		state.panes = panes;
+		console.log(key)
 		state.activeKey = key;
 		state.selectKey[0] = key;
 	},
