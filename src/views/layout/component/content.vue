@@ -18,3 +18,12 @@
 		}
 	}
 </script>
+
+
+<style lang="scss" scoped>
+#content{
+	overflow-y: auto;
+	height: 100%;
+	padding: 0 0 20px 0;
+}
+</style>

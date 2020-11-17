@@ -5,5 +5,10 @@ import router from './router'
 import store from './store'
 import 'ant-design-vue/dist/antd.css';
 import '/@/assets/style/index.scss';
+import { mockServer } from './mock';
+
+// if (process.env.NODE_ENV === 'production') {
+    mockServer()
+// }
 
 createApp(App).use(Antd).use(store).use(router).mount('#app')

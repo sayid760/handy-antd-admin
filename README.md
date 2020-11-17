@@ -10,7 +10,14 @@ npm run dev
 ```
 
 ## 总结
-1. vite版本的.vue页面中使用不了import path from 'path'，没有'default'，也不能用require
+1. vite版本的.vue页面中使用不了import path from 'path'，提示没有'default'，也不能用require； </br>
+大概都是因为这些npm包都是module.export出来的，没有弄成umd规范</br>
+Mockjs也是一样不能使用，它的使用有commonjs、AMD、CMD，唯独没有es module</br>
+可以下载下来，使用tsc转成es module规范使用
+```js
+// 想到的方法是，自己下载一份，改下
+exports['default'] = Mockjs
+```
 2. 多级菜单只展开一个 </br>
 通过监听路由切换，有切换时判断当前路由，判断是否有children，有的话获取所有path，否则拿第一个path的值
 3. echart在dom加载完才渲染
@@ -25,11 +32,24 @@ mounted() {
 ```js
 onMounted(()=>{
     window.addEventListener('resize', ()=>{
-        manipulateChart('resize')
+        chart.resize()
     })
-    //  解决全部echart超出容器宽度问题
+    // 手动触发resize
     setTimeout(()=>{
         dispatchEvent(new Event('resize'))
     })
 })
+```
+或者在全局中触发resize
+```js
+// main.ts
+Vue.prototype.resize = function () {
+  if (document.createEvent) {
+    var event = document.createEvent('HTMLEvents')
+    event.initEvent('resize', true, true)
+    window.dispatchEvent(event)
+  } else if (document.createEventObject) {
+    window.fireEvent('onresize')
+  }
+}
 ```

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box>p { background: rebeccapurple;}
+        .box~p{ background: yellow;}
+    </style>
+</head>
+<body>
+   <script>
+const getFib = (number) => {
+  if (number <= 2) {
+    return 1;
+  } else {
+    return getFib(number - 1) + getFib(number - 2);
+  }
+}
+
+
+ 
+//创建缓存代理的工厂函数
+ 
+const getCacheProxy = (fn, cache = new Map()) => {
+  return new Proxy(fn, {
+    apply(target, context, args) {
+      const argsString = args.join(' ');
+       console.log(args)
+      if (cache.has(argsString)) {
+          console.log('~~~~~~')
+        console.log(argsString)
+        // 如果有缓存,直接返回缓存数据
+        console.log(`输出${args}的缓存结果: ${cache.get(argsString)}`);
+        return cache.get(argsString);
+      }
+      const result = fn(...args);
+      cache.set(argsString, result);
+      return result;
+    }
+  })
+}
+ 
+//使用
+const getFibProxy = getCacheProxy(getFib)
+getFibProxy(40); // 102334155
+getFibProxy(40); // 输出40的缓存结果: 102334155
+   </script>
+</body>
+</html>

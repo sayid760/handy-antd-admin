@@ -32,7 +32,10 @@ export const removeStorage = (key:string) => {
   return localStorage.removeItem(key)
 }
 
-
+/**
+ * @param {Array} tree 
+ * @param {String} path 
+ */
 export const genPath = (tree, path)=> {
   let arr = [];
   function func(tree, path = null) {
@@ -53,4 +56,27 @@ export const genPath = (tree, path)=> {
   }
   func(tree, path);
   return arr;
+}
+
+
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
+export function param2Obj(url) {
+  const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
+  if (!search) {
+    return {}
+  }
+  const obj = {}
+  const searchArr = search.split('&')
+  searchArr.forEach(v => {
+    const index = v.indexOf('=')
+    if (index !== -1) {
+      const name = v.substring(0, index)
+      const val = v.substring(index + 1, v.length)
+      obj[name] = val
+    }
+  })
+  return obj
 }

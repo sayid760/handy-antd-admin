@@ -3,11 +3,15 @@
 </template>
 
 <script>
-import { computed, watch, ref, reactive } from 'vue'
+import { computed, watch, ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 export default {
   name: "App",
-  setup(){}
+  setup(){
+    onMounted(()=>{
+      console.log(process.env.NODE_ENV)
+    })
+  }
 };
 </script>
 

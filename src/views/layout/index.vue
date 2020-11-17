@@ -20,10 +20,13 @@
       <a-layout-header>
         <Header></Header>
       </a-layout-header>
+      <div>
+         <!-- 选项卡页面 -->
+        <Tab v-if="tab"></Tab>
+      </div>
       <!-- 中心区域 -->
       <a-layout-content>
-        <!-- 选项卡页面 -->
-        <Tab v-if="tab"></Tab>
+       
         <!-- main区域 -->
         <Content></Content>
         <!-- 设置页面 -->
@@ -91,6 +94,11 @@ html {
   z-index: 999;
   overflow-y: auto;
 }
+
+#basic-layout .ant-layout-content{
+  overflow: hidden;
+}
+
 .ant-layout-sider::-webkit-scrollbar {
     width: 0;
 }
