@@ -1,18 +1,15 @@
 <template>
   <div id="menu">
-    <a-menu
-      :openKeys="openKey"
-      :selectedKeys="selectKey"
-      :mode="menuModel"
-      :theme="theme"
-      @openChange="openChange"
+     <a-menu
+        v-model:open-keys="openKeys"
+        v-model:selected-keys="selectedKeys"
+        mode="inline"
+        :theme="theme"
+        @click="clickMenuItem"
     >
-      <sub-menu
-        v-for="(route) in routes"
-        :key="route.path"
-        :item="route"
-        :base-path="route.path"
-      />
+    <template v-for="item in menus" :key="item.name">
+      <menu-item :menu-info="item" />
+    </template>
     </a-menu>
   </div>
 </template>
@@ -20,68 +17,55 @@
 import { computed, watch, getCurrentInstance, onMounted, reactive, ref, toRefs, toRef, isRef, unref} from "vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
-import SubMenu from "./SubMenu.vue";
+// import SubMenu from "./SubMenu.vue";
+import MenuItem from './menu-item.vue'
 import { genPath } from '/@/utils'
+import { routes } from '/@/router/routes'
 
 export default {
   components: {
-    SubMenu,
+    MenuItem,
   },
   setup() {
     const { getters, commit } = useStore();
     const { ctx } = getCurrentInstance();
-    const route = useRoute();
-    const routes = computed(() => ctx.$root.$router.options.routes)
+    const currentRoute = useRoute();
+    const router = useRouter()
+    // const routes = computed(() => ctx.$root.$router.options.routes)
+
+    // 获取当前打开的子菜单
+    const getOpenKeys = () => currentRoute.matched.length>1? [currentRoute.matched[1]?.name, currentRoute.matched[2]?.name]: [currentRoute.matched[1]?.name]
 
     const state = reactive({
-      lastOpenKey: null,
-      openKey: computed(() => getters.openKey),
-      selectKey: computed(() => {
-        console.log(getters.selectKey)
-        return getters.selectKey
-      }),
-      openk:null
+      openKeys: getOpenKeys(),
+      selectedKeys: [currentRoute.name]
     })
 
+    const menus = computed(() => routes.find(item => item.name == 'Layout').children)
     const menuModel = computed(() => getters.menuModel);
     const theme = computed(() => getters.theme);
 
-     // 获取打开的子菜单
-    const genParentPath = () =>{
-      var firstString = route.path.split('/')[1]; 
-      // console.log(firstString)
-      // const index = route.path.indexOf("/");
-      // const lastOpenKey = toRef(state, "latestOpenKey") 
-      // return route.meta.isGroup ? [...(route.matched.slice(0, 3).map(item => item.path)), lastOpenKey.value] : [route.matched[0].path]
-      return genPath(route.matched, '/'+firstString)
+
+    // 跟随页面路由变化，切换菜单选中状态
+    watch(() => currentRoute.fullPath, () => {
+      // if (currentRoute.name == 'login' || props.collapsed) return
+      state.openKeys = getOpenKeys()
+      state.selectedKeys = [currentRoute.name]
+    })
+
+    // 点击菜单
+    const clickMenuItem = (val) => {
+      const { item, key, keyPath , title} = val
+      router.push({name: key})
     }
-
-    const openChange = (openKeys) => {
-      state.latestOpenKey = openKeys.find(key => state.openKey.indexOf(key) === -1);
-      commit("layout/updateOpenKey", openKeys);
-    };
-
-    onMounted(()=>{
-        const index = route.path.lastIndexOf("/");
-        const pre = route.path.substring(0, index);
-        const end = (route.meta.onlyOne&&route.meta.onlyOne)? route.path.substring(index, route.path.length):route.path.substring(index + 1, route.path.length) 
-        let arr = genParentPath()
-        console.log(arr)
-        commit("layout/updateOpenKey", arr);
-        commit("layout/selectKey", end);
-    })
-   
-    watch(() => route.fullPath, () => {
-      let arr = genParentPath()
-      commit("layout/updateOpenKey", arr);
-    })
 
     return {
       ...toRefs(state),
-      routes,
+      // routes,
       menuModel,
       theme,
-      openChange,
+      menus,
+      clickMenuItem,
     };
   },
 };

@@ -2,11 +2,23 @@
 # vue3-antd-system
 该方案作为一套多功能的后台框架模板，适用于绝大部分的后台管理系统开发。基于vue3，使用vite脚手架，引用Ant组件库，方便开发快速简洁好看的组件。轻量级，适合扩展配置
 
+- [x] 框架
+  - [x] 菜单目录（静态/动态路由）
+  - [x] tab标签
+  - [x] 登录（登录/退出）
+- [x] 其他模块
+  - [x] echart图标
+  - [x] 系统管理（账号管理/角色管理/菜单管理/字典管理）  
 
 ## 使用
 ```js
+// client端
 npm install 
 npm run dev
+
+// server端
+npm install
+npm run start 
 ```
 
 ## 总结
@@ -18,6 +30,9 @@ Mockjs也是一样不能使用，它的使用有commonjs、AMD、CMD，唯独没
 // 想到的方法是，自己下载一份，改下
 exports['default'] = Mockjs
 ```
+
+2. 使用不了`js-cookie`，可以用document.cookie读取
+
 2. 多级菜单只展开一个 </br>
 通过监听路由切换，有切换时判断当前路由，判断是否有children，有的话获取所有path，否则拿第一个path的值
 3. echart在dom加载完才渲染
@@ -53,3 +68,4 @@ Vue.prototype.resize = function () {
   }
 }
 ```
+

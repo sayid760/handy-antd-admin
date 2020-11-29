@@ -1,6 +1,6 @@
 // 可以根据路由模式的不同，后面俩可以只引用一个
 import { createRouter,  createWebHashHistory } from 'vue-router'
-import routes from './routes.js'
+import {routes} from './routes.ts'
 
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -17,7 +17,6 @@ router.beforeEach(async (to, from) => {
   //配置路由加载动画效果
   NProgress.start();
   //这里也可以验证权限
-
   return true;
 })
 

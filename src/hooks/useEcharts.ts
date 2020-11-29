@@ -1,5 +1,6 @@
 import { onMounted, watch, onUnmounted, nextTick } from 'vue';
 import echarts from 'echarts';
+import { useStore } from "vuex";
 
 type InitOptions = {
     devicePixelRatio?: number
@@ -26,6 +27,8 @@ function useECharts<T extends { option: echarts.EChartOption }>(
 } {
     let chartProxy: echarts.ECharts | null;
     let chart 
+    const { getters } = useStore()
+
     const draw=()=>{
         chart = echarts.init(
             document.getElementById(el) as HTMLDivElement,
@@ -61,11 +64,19 @@ function useECharts<T extends { option: echarts.EChartOption }>(
             }
         });
 
+        window.addEventListener('resize', ()=>{
+            manipulateChart('resize')
+        })
+
     });
 
     onUnmounted(() => {
         chartProxy.dispose();
         chartProxy = null;
+
+        window.removeEventListener('resize',()=>{
+            manipulateChart('resize')
+        })
     });
 
     function manipulateChart(property: InstanceMethods, ...args: any[]): any {
@@ -75,6 +86,12 @@ function useECharts<T extends { option: echarts.EChartOption }>(
     watch(() => props.option, (newOption: echarts.EChartOption) => {
         manipulateChart('setOption', newOption)
     });
+
+    watch(() => getters.sideCollapsed, () => {
+        setTimeout(()=>{
+            manipulateChart('resize')
+        }, 200)
+    })
 
     function echartsGraphicMethods(method: GraphicMethods, ...args: any[]): any {
         return echarts.graphic[method](...args);

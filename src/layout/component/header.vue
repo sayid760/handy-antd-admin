@@ -24,12 +24,35 @@
       <CompressOutlined v-else class="expand menu-item" @click="full(2)" />
       <!-- 主题设置隐显键 -->
       <SettingOutlined class="setting menu-item" @click="setting()" />
+      <a-dropdown :trigger="['hover']">
+        <a-avatar @click="e => e.preventDefault()">{{ username }}</a-avatar>
+        <template v-slot:overlay>
+          <a-menu style="user-select: none">
+            <a-menu-item>
+              <a href="javascript:;">个人中心</a>
+            </a-menu-item>
+            <a-menu-divider/>
+            <a-menu-item>
+              <a @click.prevent="doLogout"><PoweroffOutlined /> 退出登录</a>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+      <!-- <Dropdown>
+        <a-avatar>{{ username }}</a-avatar>
+        <template v-slot:overlay>
+        </template>
+      </Dropdown> -->
     </div>
   </div>
 </template>
 <script>
-import { computed } from "vue";
+import { defineComponent, computed , reactive, toRefs, createVNode} from "vue";
 import { useStore } from "vuex";
+import {useRouter, useRoute} from 'vue-router'
+import {message, Modal} from 'ant-design-vue'
+
+
 /** 图标集 */
 import {
   MenuFoldOutlined,
@@ -38,8 +61,10 @@ import {
   ExpandOutlined,
   CompressOutlined,
   ReloadOutlined,
+  PoweroffOutlined
 } from "@ant-design/icons-vue";
-export default {
+
+export default defineComponent({
   components: {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -47,6 +72,7 @@ export default {
     ExpandOutlined,
     CompressOutlined,
     ReloadOutlined,
+    PoweroffOutlined
   },
   methods: {
     full: function (num) {
@@ -81,20 +107,53 @@ export default {
     },
   },
   setup() {
-    const { getters, commit } = useStore();
+    const { getters, commit, dispatch } = useStore();
     const collapsed = computed(() => getters.sideCollapsed);
     const fullscreen = computed(() => getters.fullscreen);
-    const menuModel = computed(() => getters.menuModel);
+    const menuModel = computed(() => getters.menuModel)
+    const router = useRouter()
+    const route = useRoute()
+
+    const state = reactive({
+      username: 'xiaoming' || getters.userInfo.username,
+      fullscreenIcon: 'FullscreenOutlined'
+    })
+
+     // 退出登录
+    const doLogout = () => {
+      Modal.confirm({
+        title: '您确定要退出登录吗？',
+        // icon: createVNode(QuestionCircleOutlined),
+        onOk: () => {
+          console.log(router, '退出登录')
+          // logout({})
+          dispatch('user/LogOut').then(res => {
+            message.success('成功退出登录')
+            // 移除标签页
+            // localStorage.removeItem(TABS_ROUTES)
+            router.replace({
+              name: 'login',
+              query: {
+                redirect: route.fullPath
+              }
+            }).finally(() => location.reload())
+          })
+        }
+      })
+    }
+
     return {
+      ...toRefs(state),
       collapsed,
       fullscreen,
       trigger: () => commit("layout/TOGGLE_SIDEBAR"),
       setting: () => commit("layout/TOGGLE_SETTING"),
       updateFullscreen: () => commit("layout/updateFullscreen"),
       menuModel,
+      doLogout,
     };
   },
-};
+})
 </script>
 <style scoped>
 #header {

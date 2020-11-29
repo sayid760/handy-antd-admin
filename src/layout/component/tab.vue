@@ -41,7 +41,7 @@
 <script>
 import { computed, getCurrentInstance, ref, watch, onMounted } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { DownOutlined } from "@ant-design/icons-vue";
 import { getStorage } from '/@/utils'
 export default {
@@ -79,11 +79,22 @@ export default {
     const panes = computed(() => getters.panes);
     const activeKey = computed(() => getters.activeKey);
     const { ctx } = getCurrentInstance();
-    const route = useRoute();
-   
+    const route = useRoute()
+    const router = useRouter()
+
     // 监听, 当前选项卡切换时, 切换相关路由
     watch(activeKey,(targetKey)=>{
         ctx.$root.$router.push(panes.value.find(item => item.key === targetKey));
+    })
+
+    watch(() => route.fullPath, () => {
+      let obj={
+        'key': route.name,
+        'title':route.meta.title,
+        'path': route.path
+      }
+      // console.log('~~~~~111111~~~~~~~~~', currentRoute.meta)
+      commit("layout/addTab", obj);
     })
 
     onMounted(()=>{

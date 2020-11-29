@@ -1,5 +1,51 @@
 import { resolve } from 'path'
 import type { UserConfig } from 'vite'
+// import { loadEnv } from './src/utils/index'
+
+// const envFiles = [
+//   /** default file */ `.env`,
+//   /** mode file */ `.env.${process.env.NODE_ENV}`
+// ]
+// for (const file of envFiles) {
+//   const envConfig = dotenv.parse(fs.readFileSync(file))
+//   for (const k in envConfig) {
+//     process.env[k] = envConfig[k]
+//   }
+// }
+
+// console.log(process.env.VUE_APP_API_URL)
+
+// Read all environment variable configuration files to process.env
+
+import dotenv from 'dotenv'
+
+// 环境参数
+export const loadEnv =()=> {
+  const env = process.env.NODE_ENV;
+  const ret: any = {};
+  const envList = [`.env.${env}.local`, `.env.${env}`, '.env.local', '.env'];
+  envList.forEach((e) => {
+    dotenv.config({
+      path: e,
+    });
+  });
+
+  for (const envName of Object.keys(process.env)) {
+    let realName = (process.env as any)[envName].replace(/\\n/g, '\n');
+    realName = realName === 'true' ? true : realName === 'false' ? false : realName;
+    ret[envName] = realName;
+    process.env[envName] = realName;
+  }
+  return ret;
+}
+
+const viteEnv = loadEnv();
+
+const {
+  VUE_APP_API_URL
+} = viteEnv;
+
+console.log(VUE_APP_API_URL)
 
 const Config: UserConfig = {
   alias: {
@@ -22,15 +68,12 @@ const Config: UserConfig = {
   // 是否自动在浏览器打开
   open: false,
   // 是否开启 https
-  https: false,
+  https: false,*/
+  // port: 3000,
+  // hostname: "localhost",
   proxy: {
-      // 如果是 /api 打头，则访问地址如下
-      '/api': {
-          target: 'http://39.100.8.62:8080',
-          changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, '')
-      }
-  }*/
+  '/api': 'http://localhost:3001',
+  }
 }
 
 

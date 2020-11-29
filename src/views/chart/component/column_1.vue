@@ -97,7 +97,7 @@ export default {
 								color:'#3DC3F0',
 								fontWeight:'bold'
 							},
-							barMaxWidth:30,
+							barMaxWidth:28,
 							itemStyle:{
 								color: {
 									type: 'linear',
@@ -106,9 +106,9 @@ export default {
 									x2: 0,
 									y2: 1,
 									colorStops: [{
-										offset: 0, color: '#fe94ea' // 0% 处的颜色
+										offset: 0, color: '#ffe38d' // 0% 处的颜色
 									}, {
-										offset: 1, color: '#f762db' // 100% 处的颜色
+										offset: 1, color: '#ffc616' // 100% 处的颜色
 									}]
 								}
 							},
@@ -124,7 +124,7 @@ export default {
 								color:'#3D8BF0',
 								fontWeight:'bold'
 							},
-							barMaxWidth:30,
+							barMaxWidth:28,
 							itemStyle:{
 								color: {
 									type: 'linear',
@@ -146,17 +146,6 @@ export default {
             }
         );
         const { manipulateChart } = useECharts(data, 'column1');
-		onMounted(()=>{
-			window.addEventListener('resize', ()=>{
-				manipulateChart('resize')
-			})
-		})
-
-		onUnmounted(()=>{
-			window.removeEventListener('resize',()=>{
-				manipulateChart('resize')
-			})
-		})
         
         return {
             data

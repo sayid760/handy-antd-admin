@@ -9,7 +9,7 @@ export default {
   name: "App",
   setup(){
     onMounted(()=>{
-      console.log(process.env.NODE_ENV)
+      // console.log(process.env.NODE_ENV)
     })
   }
 };

@@ -1,3 +1,5 @@
+
+
 /**
  *  函数防抖
  *  @param {Function} func  包装的函数
@@ -5,6 +7,7 @@
  *  @param {boolean} immediate 第一次滚动会执行两次  开始滚动和结束滚动的时候
  *  @return {*}
  */
+export const TOKEN_KEY = 'han_token'
 
 export const debounce=(func, wait, immediate = false)=>{
   let timeout
@@ -80,3 +83,4 @@ export function param2Obj(url) {
   })
   return obj
 }
+

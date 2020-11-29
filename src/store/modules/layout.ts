@@ -19,7 +19,7 @@ const state = {
 	tab: true,
 	// 选项卡内容存储
 	panes: [
-		{ title: "首页", key: defaultHomeKey, path: "/dashboard", closable: false }
+		// { title: "首页", key: defaultHomeKey, path: "/dashboard", closable: false }
 	],
 	// 当前激活选项卡
 	activeKey: defaultHomeKey,
@@ -116,7 +116,7 @@ const mutations = {
 			}
 		});
 		// 过滤删除后的数组
-		const panes = state.panes.filter((pane) => pane.key !== targetKey);
+		let panes = state.panes.filter((pane) => pane.key !== targetKey);
 		// 如果存在长度,并且删除的是当前选中的数组
 		if (panes.length && activeKey === targetKey) {
 			if (lastIndex >= 0) {
@@ -125,20 +125,28 @@ const mutations = {
 				activeKey = panes[0].key;
 			}
 		}
+
+		if(panes.length==0){
+			activeKey = 'dashboard-welcome'
+			panes = [{ "key": "dashboard-welcome", "title": "首页", "path": "/dashboard/welcome", "closable":true}]
+		}
+	
 		state.panes = panes;
 		state.activeKey = activeKey;
 		state.selectKey[0] = activeKey;
 	},
 	closeAllTab(state) {
 		// 处理之前
-		const panes = state.panes.filter((pane) => pane.closable === false);
+		let panes = state.panes.filter((pane) => pane.closable === false);
 		// 设置重新选中获取当前数组中的最后一个
 		const length = panes.length;
-		const key = panes[length - 1].key;
-		state.panes = panes;
-		console.log(key)
-		state.activeKey = key;
-		state.selectKey[0] = key;
+		if(length===0){
+			let	activeKey = 'dashboard-welcome'
+			panes = [{ "key": "dashboard-welcome", "title": "首页", "path": "/dashboard/welcome" ,"closable":true}]
+			state.panes = panes;
+			state.activeKey = activeKey;
+			state.selectKey[0] = activeKey;
+		}
 	},
 	closeOtherTab(state) {
 		const panes = state.panes.filter((pane) => pane.closable === false || pane.key === state.activeKey);

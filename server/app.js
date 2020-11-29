@@ -67,9 +67,9 @@ app.use(async(ctx, next)=>{
     }
 })
 
-app.use(koajwt({secret: JET_SECRET}).unless({
-    path:['/user/login', '/user/weixin-login1', '/user/web-view',  '/user/test', '/track/w']
-}))
+// app.use(koajwt({secret: JET_SECRET}).unless({
+//     path:['/admin/test']
+// }))
 
 
 // 路由

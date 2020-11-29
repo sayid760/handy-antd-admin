@@ -1,6 +1,6 @@
 <template>
-  <!-- <ECharts :option="data.option" > </ECharts> -->
   <div id="line1"></div>
+  <!-- <ECharts :option="data.option" > </ECharts> -->
   <!-- <div style="text-align: center;">
     <div @click="changeOption2" class="set-btn">setOption</div>
     <div @click="dispose2" class="set-btn">dispose</div>
@@ -279,7 +279,9 @@ export default {
                 ]
             }
         });
-        const { manipulateChart } = useECharts(data, 'line1');
+		const { manipulateChart } = useECharts(data, 'line1');
+		   
+		/*
         function changeOption1() {
             const newData = [];
             for (let i = 0; i < 6; i++) {
@@ -292,9 +294,12 @@ export default {
                     }
                 ]
             };
-        }
+		}
+	
+		// 点击改变尺寸 
         function dispose2() {
-            manipulateChart('dispose');
+			manipulateChart('dispose');
+			dispatchEvent(new Event('resize'))
         }
         function changeOption2() {
             const newData = [];
@@ -310,6 +315,7 @@ export default {
             };
 		}
 	
+		// 挂载绑定，销毁清除
 		onMounted(()=>{
 			window.addEventListener('resize', ()=>{
 				manipulateChart('resize')
@@ -321,16 +327,13 @@ export default {
 				manipulateChart('resize')
 			})
 		})
-
-		const aa=()=>{
-			dispatchEvent(new Event('resize'))
-		}
+		*/
         
         return {
             data,
-            changeOption1,
-            changeOption2,
-			dispose2
+            // changeOption1,
+            // changeOption2,
+			// dispose2
         }
     }
 }

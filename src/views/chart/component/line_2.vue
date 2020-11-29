@@ -149,18 +149,7 @@ export default {
             }
         );
         const { manipulateChart } = useECharts(data, 'line2');
-		onMounted(()=>{
-			window.addEventListener('resize', ()=>{
-				manipulateChart('resize')
-			})
-		})
-
-		onUnmounted(()=>{
-			window.removeEventListener('resize',()=>{
-				manipulateChart('resize')
-			})
-		})
-        
+		
         return {
             data
         }

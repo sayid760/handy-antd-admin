@@ -61,7 +61,7 @@ export default {
 
     // 菜单单击触发函数
     const clickMenuItem = function (key, title, path) { 
-      console.log(key)
+      console.log('---------------->', key, title, path)
       // commit("layout/updateOpenKey", route.matched[0].path);
       commit("layout/addTab", { key, title, path }); // 新增顶部选项卡操作
       commit("layout/selectKey", key); // 设置当前菜单选中

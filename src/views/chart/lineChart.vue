@@ -26,7 +26,6 @@ import line2 from './component/line_2.vue'
 import line3 from './component/line_3.vue'
 import line4 from './component/line_4.vue'
 
-// import Logo from "./component/logo.vue"
 export default {
     components: {
         line1,

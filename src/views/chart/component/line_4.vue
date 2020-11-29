@@ -167,19 +167,8 @@ export default {
 				}
             }
         );
-        const { manipulateChart } = useECharts(data, 'line4');
-		onMounted(()=>{
-			window.addEventListener('resize', ()=>{
-				manipulateChart('resize')
-			})
-		})
-
-		onUnmounted(()=>{
-			window.removeEventListener('resize',()=>{
-				manipulateChart('resize')
-			})
-		})
-        
+		const { manipulateChart } = useECharts(data, 'line4');
+		
         return {
            
         }

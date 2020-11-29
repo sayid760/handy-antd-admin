@@ -2,8 +2,8 @@
   "name": "vue3-vite",
   "version": "0.0.5",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "cross-env NODE_ENV=development vite",
+    "build": "cross-env NODE_ENV=production vite build",
     "release": "sh release.sh"
   },
   "dependencies": {
@@ -17,7 +17,10 @@
   "devDependencies": {
     "@types/echarts": "^4.9.0",
     "@vue/compiler-sfc": "^3.0.0-rc.1",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "echarts": "^4.9.0",
+    "js-cookie": "^2.2.1",
     "mockjs": "^1.1.0",
     "path": "^0.12.7",
     "sass": "^1.28.0",

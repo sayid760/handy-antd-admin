@@ -1,96 +1,127 @@
-import Axios from 'axios'
-import baseURL from 'src/../config/url'
-import { Message } from 'iview'
-import Cookies from 'js-cookie'
-import { TOKEN_KEY } from 'src/libs/util'
+import axios from 'axios'
+// import store from '~/store'
+// import { getToken, setToken } from '~/assets/utils/auth'
+// import { Message, Loading } from 'element-ui'
 
-class httpRequest {
-  constructor () {
-    this.options = {
-      method: '',
-      url: ''
+
+class HttpRequest {
+    constructor () {
+        this.loading = null
+        this.data=null
+        this.atoken = null
+        // 存储请求队列
+        this.queue = {}
     }
-    // 存储请求队列
-    this.queue = {}
-  }
-
-  // 销毁请求实例
-  destroy (url) {
-    delete this.queue[url]
-    const queue = Object.keys(this.queue)
-    return queue.length
-  }
-
-  // 请求拦截
-  interceptors (instance, url) {
-    // 添加请求拦截器
-    instance.interceptors.request.use(config => {
-      if (!config.url.includes('/users')) {
-        config.headers['x-access-token'] = Cookies.get(TOKEN_KEY)
-      }
-      // Spin.show()
-      // 在发送请求之前做些什么
-      return config
-    }, error => {
-      // 对请求错误做些什么
-      return Promise.reject(error)
-    })
-
-    // 添加响应拦截器
-    instance.interceptors.response.use((res) => {
-      let {data} = res
-      const is = this.destroy(url)
-      if (!is) {
-        setTimeout(() => {
-          // Spin.hide()
-        }, 500)
-      }
-      if (data.action !== 'success') {
-        // 后端服务在个别情况下回报201，待确认
-        if (data.action === 'login') {
-          Cookies.remove(TOKEN_KEY)
-          Message.error('未登录，或登录失效，请登录')
-          window.location.href = window.location.pathname + '#/login'
-        } else {
-          if (data.msg) Message.error(data.msg)
-        }
-        return false
-      }
-      return data
-    }, (error) => {
-      Message.error('服务内部错误')
-      // 对响应错误做点什么
-      return Promise.reject(error)
-    })
-  }
-
-  // 创建实例
-  create () {
-    let conf = {
-      baseURL: `${baseURL}`,
-      // timeout: 2000,
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'X-URL-PATH': location.pathname
-      }
+    // 销毁请求实例
+    distroy (url) {
+        delete this.queue[url]
+        const queue = Object.keys(this.queue)
+        return queue.length
+        // if (!Object.keys(this.queue).length) {
+        //     // this.loading.close()
+        //     console.log('加载关闭...')
+        // }
     }
-    return Axios.create(conf)
-  }
+    // 请求拦截
+    interceptors (instance, url) {
+        // 添加请求拦截器
+        instance.interceptors.request.use(config => {
+            // 判断是否存在token，如果存在的话，请求带上token,后端接口判断请求头有无token
+            // if (getToken()) {
+            //     config.headers.Authorization = this.atoken || getToken() 
+            // }
 
-  // 合并请求实例
-  mergeReqest (instances = []) {
-    //
-  }
+       /*     let whiteList = ['/saasContentDetail/queryAllByPage', '/saasContentCover/queryCaseListByParam']
+            // 添加全局的loading..以及不需要loading 页面的配置
+            // 不添加loading 白名单
+            if (!Object.keys(this.queue).length) {
+                let valid = true
+                whiteList.forEach(reg => {
+                    if (url.indexOf(reg) != -1) {
+                        valid = false
+                    }
+                })
+                if (valid) {
+                    this.loading = Loading.service({
+                        lock: true,
+                        text: '加载中……',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    })
+                    console.log('加载中...')
+                } else {
+                    this.loading.close()
+                }
+            }
+      */
+            this.queue[url] = true
+            return config
+        }, error => {
+            return Promise.reject(error)
+        })
+        // 添加响应拦截器
+        instance.interceptors.response.use(res => {
+            // 关闭loading
+            // this.loading.close()
+            const { data } = res
+            this.distroy(url)
+            return data
+            // if (data.code == '10000') { // token过期
+            //     if (!window.isRefreshing) {
+            //     window.isRefreshing = true
+            //     // res.headers.Authorization = res.data.data.token
+            //     this.atoken = res.data.data.token
+            //     setToken(res.data.data.token)
+            //     return this.request(this.data).then(res=>{
+            //         // console.log('失效重新请求了===========>')
+            //         // console.log(res)
+            //         window.isRefreshing = false
+            //         this.atoken = null
+            //         this.data = null
+            //         this.distroy(url)
+            //         return res
+            //     })
+            //     }
+            // }else if (data.code == '10001') { // token失效
+            //     Message({
+            //         message: '登录超时，请重新登录',
+            //         type: 'error',
+            //         duration: 5 * 1000
+            //     })
+            //     store.dispatch('LoginOut').then(()=>{
+            //         location.reload() // 为了重新实例化vue-router对象 避免bug
+            //     })
+            // }else{
+            //     this.distroy(url)
+            //     return data
+            // }
+        }, error => {
+            this.distroy(url)
+            console.log(error.response)
+            // Message({
+            //     message: '链接超时，请稍候再试',
+            //     type: 'error',
+            //     duration: 5 * 1000
+            // })
+            return Promise.reject(error.response.data)
+        })
+    }
 
-  // 请求实例
-  request (options) {
-    var instance = this.create()
-    this.interceptors(instance, options.url)
-    options = Object.assign({}, options)
-    this.queue[options.url] = instance
-    return instance(options)
-  }
+    request (options) {
+        this.data = options
+        const instance = axios.create({
+            baseURL: '/api/', // api的base_url
+            timeout: 60000, // request timeout
+            withCredentials: true,
+            // headers: {
+            //     'Content-Type': 'application/json; charset=utf-8',
+            //     'X-URL-PATH': location.pathname
+            // }
+        })
+        this.interceptors(instance, options.url)
+        options = Object.assign({}, options)
+        this.queue[options.url] = instance
+        return instance(options)
+    }
 }
 
-export default httpRequest
+export default HttpRequest
