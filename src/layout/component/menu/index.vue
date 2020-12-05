@@ -31,6 +31,7 @@ export default {
     const { ctx } = getCurrentInstance();
     const currentRoute = useRoute();
     const router = useRouter()
+    const store = useStore()
     // const routes = computed(() => ctx.$root.$router.options.routes)
 
     // 获取当前打开的子菜单
@@ -41,7 +42,10 @@ export default {
       selectedKeys: [currentRoute.name]
     })
 
-    const menus = computed(() => routes.find(item => item.name == 'Layout').children)
+    console.log(store.getters.menus)
+
+    const menus = computed(() => store.getters.menus || routes.find(item => item.name == 'Layout').children)
+
     const menuModel = computed(() => getters.menuModel);
     const theme = computed(() => getters.theme);
 

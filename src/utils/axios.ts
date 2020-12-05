@@ -3,6 +3,13 @@ import axios from 'axios'
 // import { getToken, setToken } from '~/assets/utils/auth'
 // import { Message, Loading } from 'element-ui'
 
+// import getEnv from './env'
+// console.log(getEnv)
+// console.log(import.meta)
+console.log(import.meta.env.MODE)
+console.log(import.meta.env.PROD)
+console.log(import.meta.env.DEV)
+
 
 class HttpRequest {
     constructor () {
@@ -26,6 +33,7 @@ class HttpRequest {
     interceptors (instance, url) {
         // 添加请求拦截器
         instance.interceptors.request.use(config => {
+
             // 判断是否存在token，如果存在的话，请求带上token,后端接口判断请求头有无token
             // if (getToken()) {
             //     config.headers.Authorization = this.atoken || getToken() 
@@ -109,9 +117,9 @@ class HttpRequest {
     request (options) {
         this.data = options
         const instance = axios.create({
-            baseURL: '/api/', // api的base_url
+            baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://b.sayid760.fun/api', 
             timeout: 60000, // request timeout
-            withCredentials: true,
+            // withCredentials: true,
             // headers: {
             //     'Content-Type': 'application/json; charset=utf-8',
             //     'X-URL-PATH': location.pathname

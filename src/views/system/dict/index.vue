@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        字典管理
+        <a-card>字典管理</a-card>
     </div>
 </template>
 

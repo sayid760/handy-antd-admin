@@ -39,12 +39,12 @@ export default {
     Login ({ commit }, { account, password, loginType }) {
       return new Promise((resolve, reject) => {
           login({ account, password }).then(res => {
-            const {data, code} = res
+            const {result, code} = res
             if (code == 200) {
-              Storage.set(ACCESS_TOKEN, data.token, 7 * 24 * 60 * 60 * 1000)
-              Storage.set(CURRENT_USER, data, 7 * 24 * 60 * 60 * 1000)
-              commit('setToken', data.token)
-              commit('setInfo', data)
+              Storage.set(ACCESS_TOKEN, result, 7 * 24 * 60 * 60 * 1000)
+              Storage.set(CURRENT_USER, result, 7 * 24 * 60 * 60 * 1000)
+              commit('setToken', result)
+              commit('setInfo', result)
             }
             resolve(res)
           }).catch(err => {

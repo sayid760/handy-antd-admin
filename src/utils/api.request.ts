@@ -33,7 +33,7 @@ export const request = {
                 method: 'post',
                 data: val[1],
                 header: val[2],
-                withCredentials: val[0] == '/saasFile/fileUpload' || val[0] == '/saasFile/delete/' ? false : true
+                // withCredentials: val[0] == '/saasFile/fileUpload' || val[0] == '/saasFile/delete/' ? false : true
             })
             // 返回请求的结果
             promise.then((response) => {
@@ -53,7 +53,7 @@ export const request = {
                 method: 'get',
                 params: val[1],
                 header: val[2],
-                withCredentials: val[0] == '/saasFile/fileUpload' || val[0] == '/saasFile/delete/' ? false : true
+                // withCredentials: val[0] == '/saasFile/fileUpload' || val[0] == '/saasFile/delete/' ? false : true
             })
             // 返回请求的结果
             promise.then((response) => {

@@ -14,6 +14,7 @@ const getters = {
 	menuModel: state => state.layout.menuModel,
 	theme: state => state.layout.theme,
 	language: state => state.layout.language,
-	languages: state => state.layout.languages
+	languages: state => state.layout.languages,
+	menus: state => state.permission.menus
 };
 export default getters;

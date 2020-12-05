@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        菜单管理
+        <a-card>菜单管理</a-card>
     </div>
 </template>
 

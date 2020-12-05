@@ -2,21 +2,6 @@ import { resolve } from 'path'
 import type { UserConfig } from 'vite'
 // import { loadEnv } from './src/utils/index'
 
-// const envFiles = [
-//   /** default file */ `.env`,
-//   /** mode file */ `.env.${process.env.NODE_ENV}`
-// ]
-// for (const file of envFiles) {
-//   const envConfig = dotenv.parse(fs.readFileSync(file))
-//   for (const k in envConfig) {
-//     process.env[k] = envConfig[k]
-//   }
-// }
-
-// console.log(process.env.VUE_APP_API_URL)
-
-// Read all environment variable configuration files to process.env
-
 import dotenv from 'dotenv'
 
 // 环境参数
@@ -39,13 +24,16 @@ export const loadEnv =()=> {
   return ret;
 }
 
-const viteEnv = loadEnv();
+const viteEnv = loadEnv()
 
 const {
-  VUE_APP_API_URL
+  BASE_URL,
+  TARGET,
+  OUTPUT_DIR,
+  PUBLIC_PATH
 } = viteEnv;
 
-console.log(VUE_APP_API_URL)
+console.log(BASE_URL, TARGET, OUTPUT_DIR, PUBLIC_PATH)
 
 const Config: UserConfig = {
   alias: {
@@ -56,14 +44,12 @@ const Config: UserConfig = {
   optimizeDeps: {
     include: [
       'echarts',
-      '@ant-design/icons-vue',
-      '@ant-design/colors',
+      // '@ant-design/icons-vue',
+      // '@ant-design/colors',
       // "axios"
     ],
   },
 /*  
-  outputDir: 'dist',
-  assetsDir: 'static',
   port: '9000',
   // 是否自动在浏览器打开
   open: false,
@@ -71,8 +57,16 @@ const Config: UserConfig = {
   https: false,*/
   // port: 3000,
   // hostname: "localhost",
+  outDir: OUTPUT_DIR,
+  base: PUBLIC_PATH,  // 相当于publicPath assetsDir
   proxy: {
-  '/api': 'http://localhost:3001',
+  // '/api': 'http://localhost:3001', // 本地测试可以用这个
+    '/api': {
+        target: TARGET,
+        changeOrigin: true,  // 解决跨域问题
+        ws: false
+        // rewrite: path => path.replace(/^\/api/, '')
+    }
   }
 }
 

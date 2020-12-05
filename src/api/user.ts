@@ -36,11 +36,11 @@ import { request } from '/@/utils/api.request'
 //   })
 // }
 
-export const login = (data) => request.post('/admin/login', data)
+export const login = (data) => request.post('/sys/login', data)
 
-export const logout = (data) => request.get('/admin/logout', data)
+export const logout = (data) => request.get('/sys/logout', data)
 
-export const getUserInfo = (data) => request.post('/admin/test', data)
+export const getUserInfo = (data) => request.post('/sys/test', data)
 
-export const test = (data) => request.get('/admin/test', data)
+export const test = (data) => request.get('/sys/test', data)
 

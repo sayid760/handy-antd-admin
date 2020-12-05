@@ -7,7 +7,7 @@ export const notFound = {
   path: '/:pathMatch(.*)*',
   name: 'NotFound',
   redirect: '/error/404',
-  component: () => import(/* webpackChunkName: "404" */ '@/views/shared/error/404.vue')
+  component: () => import(/* webpackChunkName: "404" */ '/@/views/error/404.vue')
 }
 
 export const errorRoutes = {
@@ -67,11 +67,6 @@ export const common = [
         name: 'table-base',
         meta: { title: '基础表格', icon: '' },
         component: () => import('/@/views/table/base.vue')
-      },{
-        path: 'new-users',
-        name: 'new-users',
-        meta: { title: '新增用户数据', icon: '' },
-        component: () => import('/@/views/new-users/index.vue')
       }
     ]
   },

@@ -7,12 +7,12 @@
     </div>
     <a-form layout="horizontal" :model="formInline" @submit="handleSubmit" @submit.prevent>
       <a-form-item>
-        <a-input v-model:value="formInline.username" size="large" placeholder="admin">
+        <a-input v-model:value="formInline.loginName" size="large" placeholder="admin">
           <template v-slot:prefix><user-outlined type="user"/></template>
         </a-input>
       </a-form-item>
       <a-form-item>
-        <a-input v-model:value="formInline.password" size="large" type="password" placeholder="123456" autocomplete="new-password">
+        <a-input v-model:value="formInline.passWord" size="large" type="passWord" placeholder="123456" autocomplete="new-passWord">
           <template v-slot:prefix><lock-outlined type="user"/></template>
         </a-input>
       </a-form-item>
@@ -51,8 +51,8 @@ export default defineComponent({
     const state = reactive({
       loading: false,
       formInline: {
-        username: '',
-        password: '',
+        loginName: '',
+        passWord: '',
       }
     })
 
@@ -61,16 +61,16 @@ export default defineComponent({
     const route = useRoute()
 
     const handleSubmit = async () => {
-      const {username, password} = state.formInline
-      if(username.trim() == '' || password.trim() == '') return message.warning('用户名或密码不能为空！')
+      const {loginName, passWord} = state.formInline
+      if(loginName.trim() == '' || passWord.trim() == '') return message.warning('用户名或密码不能为空！')
       const hide = message.loading('登录中...', 0)
       state.loading = true
       console.log(state.formInline)
       const params = {
-        username,
-        password
+        loginName,
+        passWord
       }
-      // params.password = md5(password)
+      // params.passWord = md5(passWord)
       const {code, result, message: msg} = await store.dispatch('user/Login', params).finally(() => {
         state.loading = false
         message.destroy()

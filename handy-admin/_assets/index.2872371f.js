@@ -1,0 +1,1 @@
+import{p as a,h as s,r as t,o as n,c as o,a as c,i as d,b as r}from"./index.fb302126.js";var e={};const b=d("data-v-4b024ba0");a("data-v-4b024ba0");const f={class:"content"},i=r("字典管理");s();const l=b((function(a,s,d,r,e,l){const u=t("a-card");return n(),o("div",f,[c(u,null,{default:b((()=>[i])),_:1})])}));e.render=l,e.__scopeId="data-v-4b024ba0";export default e;

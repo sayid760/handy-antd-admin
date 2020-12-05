@@ -19,9 +19,9 @@
         </template>
       </template>
     </a-sub-menu>
-    <a-menu-item v-else :key="menuInfo.name">
+    <a-menu-item v-else :key="menuInfo.name"  v-bind="$attrs">
       <!-- <icon-font style="color: aliceblue" :type="menuInfo.meta.icon" /> -->
-      {{menuInfo.meta.title}}
+      <span> {{menuInfo.meta.title}} </span>
     </a-menu-item>
   </template>
 </template>

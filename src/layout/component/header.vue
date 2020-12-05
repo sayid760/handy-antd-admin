@@ -24,8 +24,9 @@
       <CompressOutlined v-else class="expand menu-item" @click="full(2)" />
       <!-- 主题设置隐显键 -->
       <SettingOutlined class="setting menu-item" @click="setting()" />
-      <a-dropdown :trigger="['hover']">
-        <a-avatar @click="e => e.preventDefault()">{{ username }}</a-avatar>
+      <!-- <a-dropdown :trigger="['hover']"> -->
+      <a-dropdown>
+        <a-avatar class="avatar" @click="e => e.preventDefault()">{{ username }}</a-avatar>
         <template v-slot:overlay>
           <a-menu style="user-select: none">
             <a-menu-item>
@@ -38,11 +39,6 @@
           </a-menu>
         </template>
       </a-dropdown>
-      <!-- <Dropdown>
-        <a-avatar>{{ username }}</a-avatar>
-        <template v-slot:overlay>
-        </template>
-      </Dropdown> -->
     </div>
   </div>
 </template>
@@ -180,5 +176,10 @@ export default defineComponent({
 #header .prev-menu .menu-item:hover,
 #header .next-menu .menu-item:hover {
   color: #1890ff;
+}
+
+#header .avatar{
+  padding: 0 15px;
+  cursor: pointer
 }
 </style>

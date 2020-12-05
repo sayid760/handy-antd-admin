@@ -78,13 +78,12 @@ export default {
     const { getters, commit } = useStore();
     const panes = computed(() => getters.panes);
     const activeKey = computed(() => getters.activeKey);
-    const { ctx } = getCurrentInstance();
     const route = useRoute()
     const router = useRouter()
 
     // 监听, 当前选项卡切换时, 切换相关路由
     watch(activeKey,(targetKey)=>{
-        ctx.$root.$router.push(panes.value.find(item => item.key === targetKey));
+        router.push(panes.value.find(item => item.key === targetKey))
     })
 
     watch(() => route.fullPath, () => {

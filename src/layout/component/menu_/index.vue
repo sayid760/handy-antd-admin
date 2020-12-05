@@ -22,6 +22,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from "vuex";
 import SubMenu from "./SubMenu.vue";
 import { genPath } from '/@/utils'
+import { routes } from '/@/router/routes'
 
 export default {
   components: {
@@ -31,7 +32,7 @@ export default {
     const { getters, commit } = useStore();
     const { ctx } = getCurrentInstance();
     const route = useRoute();
-    const routes = computed(() => ctx.$root.$router.options.routes)
+    // const routes = computed(() => ctx.$root.$router.options.routes)
 
     const state = reactive({
       lastOpenKey: null,

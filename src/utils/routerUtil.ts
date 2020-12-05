@@ -103,7 +103,7 @@ const list2tree = (items, parentId = -1, arr = []) => {
             name: path || '',
             children: list2tree(items, item.id, []),
             // 该路由对应页面的 组件 (动态加载)
-            component: (asyncRouterMap[path]) || Empty || (() => import('/@/views/shared/error/404.vue')),
+            component: (asyncRouterMap[path]) || Empty || (() => import('/@/views/error/404.vue')),
             props: true,
             // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
             meta: {
